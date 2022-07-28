@@ -1,5 +1,5 @@
 export default class Header {
-  header: HTMLHeadElement;
+  header: HTMLElement;
 
   constructor() {
     this.header = document.createElement('header');
@@ -22,7 +22,7 @@ export default class Header {
     this.header.append(nav);
   }
 
-  render(): HTMLHeadElement {
+  render(): HTMLElement {
     this.renderNav();
     this.header.classList.add('header');
     return this.header;
