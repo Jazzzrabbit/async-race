@@ -8,24 +8,24 @@ export default class Footer {
   renderContent() {
     const github = document.createElement('a');
     const year = document.createElement('p');
-    const logo = document.createElement('a');
-    const logoImg = document.createElement('img');
+    const logo = document.createElement('div');
+    const logoLink = document.createElement('a');
 
     github.classList.add('github');
     year.classList.add('year');
     logo.classList.add('logo');
-    logoImg.classList.add('logo__img');
 
     github.textContent = 'Github: Jazzzrabbit';
     year.textContent = '2022';
-    logo.href = '#';
-    logoImg.alt = 'RS-School-logo';
+    github.href = 'https://github.com/Jazzzrabbit';
+    logoLink.href = 'https://rs.school/js/';
 
-    logo.append(logoImg);
-    this.footer.append(github, year, logo);
+    logoLink.append(logo);
+    this.footer.append(github, year, logoLink);
   }
 
   render() {
+    this.footer.classList.add('footer');
     this.renderContent();
     return this.footer;
   }

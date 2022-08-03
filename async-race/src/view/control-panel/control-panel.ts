@@ -1,3 +1,11 @@
+import CarView from '../garage/garageView';
+
+function addCreateBtnListener() {
+  console.log('Creating a car');
+  const car = new CarView();
+  car.renderCar(1, 'Rendered', 'yellow');
+}
+
 export default class ControlPanel {
   panel: HTMLElement;
 
@@ -6,9 +14,9 @@ export default class ControlPanel {
   }
 
   renderPanel(): void {
+    const createForm = document.createElement('form');
+    const editForm = document.createElement('form');
     const createAndEdit: HTMLElement = document.createElement('div');
-    const createWrapper: HTMLElement = document.createElement('div');
-    const editWrapper: HTMLElement = document.createElement('div');
     const createInput:HTMLInputElement = document.createElement('input');
     const createInputColor: HTMLInputElement = document.createElement('input');
     const createButton: HTMLButtonElement = document.createElement('button');
@@ -16,9 +24,9 @@ export default class ControlPanel {
     const editInputColor: HTMLInputElement = document.createElement('input');
     const editButton: HTMLButtonElement = document.createElement('button');
 
+    createForm.classList.add('form');
+    editForm.classList.add('form');
     createAndEdit.classList.add('create-and-edit');
-    createWrapper.classList.add('create-wrapper');
-    editWrapper.classList.add('edit-wrapper');
     createInput.classList.add('createInput', 'input');
     createInputColor.classList.add('createInputColor', 'input');
     createButton.classList.add('createBtn', 'btn');
@@ -28,18 +36,22 @@ export default class ControlPanel {
 
     createInput.type = 'text';
     editInput.type = 'text';
-    createInput.id = 'createInput';
-    editInput.id = 'editInput';
+    createForm.id = 'createForm';
+    editForm.id = 'editForm';
     createInputColor.type = 'color';
     editInputColor.type = 'color';
 
     createButton.textContent = 'Create';
     editButton.textContent = 'Edit';
+    createButton.type = 'submit';
+    editButton.type = 'submit';
 
-    createWrapper.append(createInput, createInputColor, createButton);
-    editWrapper.append(editInput, editInputColor, editButton);
-    createAndEdit.append(createWrapper, editWrapper);
+    createForm.append(createInput, createInputColor, createButton);
+    editForm.append(editInput, editInputColor, editButton);
+    createAndEdit.append(createForm, editForm);
     this.panel.append(createAndEdit);
+
+    createButton.addEventListener('click', addCreateBtnListener);
   }
 
   renderControlButtons(): void {

@@ -1,0 +1,38 @@
+*, 
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  text-decoration: none;
+  color: inherit;
+}
+
+body {
+  background-color: #444;
+}
+
+@import '../../view/header/header.scss';
+@import '../../view/garage/garageView';
+@import '../../view/control-panel/cpanel.scss';
+@import '../../view/footer/footer.scss';
+
+
+.title {
+  color: #fff;
+}
+
+.subtitle {
+  color: #fff;
+}
+
+.btn {
+  border: 1px solid #000;
+  padding: 0.3rem;
+  text-align: center;
+  background-color: #BDB76B;
+  cursor: pointer;
+}

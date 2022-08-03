@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.logo {
+  background-image: url(../../assets/img/rs_school_js.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 5rem;
+  height: 4rem;
+}
