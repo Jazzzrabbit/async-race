@@ -1,5 +1,6 @@
 import ControlPanel from '../control-panel/control-panel';
 import GarageView from '../garage/garageView';
+import WinnersView from '../winners/winnersView';
 
 export default class Main {
   main: HTMLElement;
@@ -8,10 +9,13 @@ export default class Main {
 
   garageView: GarageView;
 
+  winnersView: WinnersView;
+
   constructor() {
     this.main = document.createElement('main');
     this.controlPanel = new ControlPanel();
     this.garageView = new GarageView();
+    this.winnersView = new WinnersView();
   }
 
   renderPagination() {
@@ -34,9 +38,11 @@ export default class Main {
   render(): HTMLElement {
     const panel = this.controlPanel.render();
     const garageView = this.garageView.render();
+    const winnersView = this.winnersView.render();
     this.main.classList.add('main');
     this.main.append(panel);
     this.main.append(garageView);
+    this.main.append(winnersView);
     this.renderPagination();
     return this.main;
   }

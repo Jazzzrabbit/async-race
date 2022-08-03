@@ -29,6 +29,11 @@ body {
   color: #fff;
 }
 
+.car-svg {
+  width: 4rem;
+  height: 4rem;
+}
+
 .btn {
   border: 1px solid #000;
   padding: 0.3rem;
@@ -36,3 +41,8 @@ body {
   background-color: #BDB76B;
   cursor: pointer;
 }
+
+.hidden {
+  display: none;
+}
+

@@ -18,6 +18,24 @@ export default class App {
     this.footer = new Footer();
   }
 
+  addListener() {
+    const toGarage = document.querySelector('.nav__garageBtn');
+    const toWinners = document.querySelector('.nav__winnersBtn');
+    const cpanel = document.querySelector('.control-panel');
+    const garage = document.querySelector('.garage-wrapper');
+    const table = document.querySelector('.table-wrapper');
+    toGarage?.addEventListener('click', () => {
+      cpanel?.classList.remove('hidden');
+      garage?.classList.remove('hidden');
+      table?.classList.add('hidden');
+    });
+    toWinners?.addEventListener('click', () => {
+      cpanel?.classList.add('hidden');
+      garage?.classList.add('hidden');
+      table?.classList.remove('hidden');
+    });
+  }
+
   init(): HTMLElement {
     const header = this.header.render();
     const main = this.main.render();
@@ -25,6 +43,7 @@ export default class App {
     this.body.append(header);
     this.body.append(main);
     this.body.append(footer);
+    this.addListener();
     return this.body;
   }
 }

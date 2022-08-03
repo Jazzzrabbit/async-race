@@ -10,9 +10,9 @@ export default class GarageView {
     this.wrapper = document.createElement('div');
   }
 
-  getCarImage(color: string) {
+  static getCarImage(color: string) {
     return `
-      <svg fill=${color}>
+      <svg class="car-svg" fill=${color}>
         <use href=${sprite}#car width="4rem" height="4rem"/>
       </svg>
     `;
@@ -69,7 +69,7 @@ export default class GarageView {
     startCarBtn.textContent = 'Start';
     stopCarBtn.textContent = 'Stop';
     carName.textContent = model;
-    carImage.innerHTML = this.getCarImage(color);
+    carImage.innerHTML = GarageView.getCarImage(color);
 
     car.append(selectCarBtn, removeCarBtn, carName, startCarBtn, stopCarBtn, carImage, road, finish);
     this.wrapper.append(car);
@@ -78,7 +78,7 @@ export default class GarageView {
   render(): HTMLElement {
     this.wrapper.classList.add('garage-wrapper');
     this.renderTitle();
-    cars.map((el: typeof cars) => this.renderCar(el.id, el.name, el.color));
+    cars.map((el) => this.renderCar(el.id, el.name, el.color));
     return this.wrapper;
   }
 }
