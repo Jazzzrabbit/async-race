@@ -1,4 +1,4 @@
-import { createCar } from '../../model/api';
+import { Car, createCar, updateCar } from '../../model/api';
 import GarageView from '../garage/garageView';
 
 function createNewCar(event: Event): void {
@@ -8,12 +8,32 @@ function createNewCar(event: Event): void {
   const name = form?.querySelector('[name="cname"]') as HTMLInputElement;
   const color = form?.querySelector('[name="ccolor"]') as HTMLInputElement;
 
-  const obj: { name: string, color: string } = {
+  const obj: Car = {
     name: name.value,
     color: color.value,
   };
   
   createCar(obj);
+  const view: GarageView = new GarageView();
+  view.render();
+  document.location.reload();
+}
+
+function editCar(event: Event): void {
+  event.preventDefault();
+
+  const form = document.getElementById('editForm') as HTMLFormElement;
+  const name = form.querySelector('[name="ename"]') as HTMLInputElement;
+  const color = form.querySelector('[name="ecolor"]') as HTMLInputElement;
+  const id = form.querySelector('[name="eid"]') as HTMLInputElement;
+
+  const obj: Car = {
+    name: name.value,
+    color: color.value,
+    id: +id.value,
+  };
+  
+  updateCar(obj);
   const view: GarageView = new GarageView();
   view.render();
   document.location.reload();
@@ -34,6 +54,7 @@ export default class ControlPanel {
     const createInputColor: HTMLInputElement = document.createElement('input');
     const createButton: HTMLButtonElement = document.createElement('button');
     const editInput: HTMLInputElement = document.createElement('input');
+    const editInputId: HTMLInputElement = document.createElement('input');
     const editInputColor: HTMLInputElement = document.createElement('input');
     const editButton: HTMLButtonElement = document.createElement('button');
 
@@ -45,6 +66,7 @@ export default class ControlPanel {
     createButton.classList.add('createBtn', 'btn');
     editInput.classList.add('editInput', 'input');
     editInputColor.classList.add('editInputColor', 'input');
+    editInputId.classList.add('input', 'hidden'); //создать скрытый инпут, куда записывать айди машины по клику
     editButton.classList.add('editBtn', 'btn');
 
     createInput.type = 'text';
@@ -57,6 +79,9 @@ export default class ControlPanel {
     editInputColor.type = 'color';
     createInput.name = 'cname';
     createInputColor.name = 'ccolor';
+    editInput.name = 'ename';
+    editInputColor.name = 'ecolor';
+    editInputId.name = 'eid';
 
     createButton.textContent = 'Create';
     editButton.textContent = 'Edit';
@@ -64,9 +89,10 @@ export default class ControlPanel {
     editButton.type = 'submit';
 
     createForm.addEventListener('submit', createNewCar);
+    editForm.addEventListener('submit', editCar);
 
     createForm.append(createInput, createInputColor, createButton);
-    editForm.append(editInput, editInputColor, editButton);
+    editForm.append(editInput, editInputId, editInputColor, editButton);
     createAndEdit.append(createForm, editForm);
     this.panel.append(createAndEdit);
   }

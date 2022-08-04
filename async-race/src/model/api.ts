@@ -65,3 +65,13 @@ export const createCar = async (data: Car): Promise<Car> => {
   return car;
 };
 
+export const updateCar = async (data: Car): Promise<Car> => {
+  const response = await fetch(`${garage}/${data.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const updated: Promise<Car> = await response.json();
+  return updated;
+};
+

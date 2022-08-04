@@ -4,6 +4,13 @@ import { Car } from '../../model/api';
 
 const { cars, carsCount } = await getCars();
 
+function getId(event: Event): void {
+  const editForm = document.getElementById('editForm') as HTMLFormElement;
+  const inputId = editForm.querySelector('[name="eid"]') as HTMLInputElement;
+
+  inputId.value = ((event.target as HTMLElement).getAttribute('id') as string);
+}
+
 export default class GarageView {
   wrapper: HTMLDivElement;
 
@@ -71,6 +78,8 @@ export default class GarageView {
     stopCarBtn.textContent = 'Stop';
     carName.textContent = model;
     carImage.innerHTML = GarageView.getCarImage(color);
+
+    selectCarBtn.addEventListener('click', getId);
 
     car.append(selectCarBtn, removeCarBtn, carName, startCarBtn, stopCarBtn, carImage, road, finish);
     this.wrapper.append(car);
