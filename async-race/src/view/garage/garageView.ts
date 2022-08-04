@@ -1,5 +1,6 @@
 import sprite from '../../assets/img/sprite.svg';
 import { getCars } from '../../model/api';
+import { Car } from '../../model/api';
 
 const { cars, carsCount } = await getCars();
 
@@ -10,7 +11,7 @@ export default class GarageView {
     this.wrapper = document.createElement('div');
   }
 
-  static getCarImage(color: string) {
+  static getCarImage(color: string): string {
     return `
       <svg class="car-svg" fill=${color}>
         <use href=${sprite}#car width="4rem" height="4rem"/>
@@ -18,10 +19,10 @@ export default class GarageView {
     `;
   }
 
-  renderTitle() {
-    const titleWrapper = document.createElement('div');
-    const title = document.createElement('h1');
-    const subtitle = document.createElement('h2');
+  renderTitle(): void {
+    const titleWrapper: HTMLDivElement = document.createElement('div');
+    const title: HTMLHeadingElement = document.createElement('h1');
+    const subtitle: HTMLHeadingElement = document.createElement('h2');
 
     titleWrapper.classList.add('title-wrapper');
     title.classList.add('title', 'garage__title');
@@ -34,7 +35,7 @@ export default class GarageView {
     this.wrapper.append(titleWrapper);
   }
 
-  renderCar(id: number, model: string, color: string) {
+  renderCar(id: number | undefined, model: string, color: string): void {
     const car: HTMLDivElement = document.createElement('div');
     const selectCarBtn: HTMLButtonElement = document.createElement('button');
     const removeCarBtn: HTMLButtonElement = document.createElement('button');
@@ -78,7 +79,7 @@ export default class GarageView {
   render(): HTMLElement {
     this.wrapper.classList.add('garage-wrapper');
     this.renderTitle();
-    cars.map((el) => this.renderCar(el.id, el.name, el.color));
+    cars.map((el: Car) => this.renderCar(el.id, el.name, el.color));
     return this.wrapper;
   }
 }

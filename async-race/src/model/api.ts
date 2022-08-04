@@ -2,24 +2,22 @@ const baseLink = 'http://127.0.0.1:3000';
 const garage = `${baseLink}/garage`;
 const winners = `${baseLink}/winners`;
 
-type Car = {
+type Cars = {
   cars: [
-    {
-      name: string,
-      color: string,
-      id: number,
-    },
+    Car,
   ],
   carsCount: string | null,
 };
 
+export type Car = {
+  name: string,
+  color: string,
+  id?: number,
+};
+
 type Winners = {
   cars: {
-    car: {
-      color: string,
-      name: string,
-      id: number,
-    },
+    car: Car,
     id: number,
     wins: number,
     time: number,
@@ -36,12 +34,12 @@ type Winner = [
 ];
 
 
-export const getCars = async (page = 1, limit = 7): Promise<Car> => {
+export const getCars = async (page = 1, limit = 7): Promise<Cars> => {
   return fetch(`${garage}/?_page=${page}&_limit=${limit}`).then(async res => 
     ({ cars: await res.json(), carsCount: res.headers.get('X-Total-Count') }));
 };
 
-export const getCar = async (id: number): Promise<{ color: string, name: string, id: number }> => {
+export const getCar = async (id: number): Promise<Car> => {
   const response: Response = await fetch(`${garage}/${id}`);
   return response.json();
 };
@@ -55,5 +53,15 @@ export const getWinners = async (page = 1, limit = 7, sort?: string[], order?: s
     carsCount: response.headers.get('X-Total-Count'),
   };
   return obj;
+};
+
+export const createCar = async (data: Car): Promise<Car> => {
+  const response: Response = await fetch(garage, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-type': 'application/json' },
+  });
+  const car: Promise<Car> = await response.json();
+  return car;
 };
 

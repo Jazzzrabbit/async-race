@@ -1,9 +1,22 @@
-import CarView from '../garage/garageView';
+import { createCar } from '../../model/api';
+import GarageView from '../garage/garageView';
 
-function addCreateBtnListener() {
-  console.log('Creating a car');
-  const car = new CarView();
-  car.renderCar(1, 'Rendered', 'yellow');
+function createNewCar(event: Event): void {
+  event.preventDefault();
+
+  const form = document.getElementById('createForm') as HTMLFormElement;
+  const name = form?.querySelector('[name="cname"]') as HTMLInputElement;
+  const color = form?.querySelector('[name="ccolor"]') as HTMLInputElement;
+
+  const obj: { name: string, color: string } = {
+    name: name.value,
+    color: color.value,
+  };
+  
+  createCar(obj);
+  const view: GarageView = new GarageView();
+  view.render();
+  document.location.reload();
 }
 
 export default class ControlPanel {
@@ -14,8 +27,8 @@ export default class ControlPanel {
   }
 
   renderPanel(): void {
-    const createForm = document.createElement('form');
-    const editForm = document.createElement('form');
+    const createForm: HTMLFormElement = document.createElement('form');
+    const editForm: HTMLFormElement = document.createElement('form');
     const createAndEdit: HTMLElement = document.createElement('div');
     const createInput:HTMLInputElement = document.createElement('input');
     const createInputColor: HTMLInputElement = document.createElement('input');
@@ -35,27 +48,31 @@ export default class ControlPanel {
     editButton.classList.add('editBtn', 'btn');
 
     createInput.type = 'text';
+    createInput.autocomplete = 'off';
+    editInput.autocomplete = 'off';
     editInput.type = 'text';
     createForm.id = 'createForm';
     editForm.id = 'editForm';
     createInputColor.type = 'color';
     editInputColor.type = 'color';
+    createInput.name = 'cname';
+    createInputColor.name = 'ccolor';
 
     createButton.textContent = 'Create';
     editButton.textContent = 'Edit';
     createButton.type = 'submit';
     editButton.type = 'submit';
 
+    createForm.addEventListener('submit', createNewCar);
+
     createForm.append(createInput, createInputColor, createButton);
     editForm.append(editInput, editInputColor, editButton);
     createAndEdit.append(createForm, editForm);
     this.panel.append(createAndEdit);
-
-    createButton.addEventListener('click', addCreateBtnListener);
   }
 
   renderControlButtons(): void {
-    const buttons = document.createElement('div');
+    const buttons: HTMLDivElement = document.createElement('div');
     const race: HTMLButtonElement = document.createElement('button');
     const reset: HTMLButtonElement = document.createElement('button');
     const generate: HTMLButtonElement = document.createElement('button');
