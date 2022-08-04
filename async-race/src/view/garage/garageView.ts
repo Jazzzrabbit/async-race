@@ -1,15 +1,9 @@
 import sprite from '../../assets/img/sprite.svg';
+import { getSelectCarId, removeCar } from '../../controller/listeners';
 import { getCars } from '../../model/api';
 import { Car } from '../../model/api';
 
 const { cars, carsCount } = await getCars();
-
-function getId(event: Event): void {
-  const editForm = document.getElementById('editForm') as HTMLFormElement;
-  const inputId = editForm.querySelector('[name="eid"]') as HTMLInputElement;
-
-  inputId.value = ((event.target as HTMLElement).getAttribute('id') as string);
-}
 
 export default class GarageView {
   wrapper: HTMLDivElement;
@@ -79,7 +73,8 @@ export default class GarageView {
     carName.textContent = model;
     carImage.innerHTML = GarageView.getCarImage(color);
 
-    selectCarBtn.addEventListener('click', getId);
+    selectCarBtn.addEventListener('click', getSelectCarId);
+    removeCarBtn.addEventListener('click', removeCar);
 
     car.append(selectCarBtn, removeCarBtn, carName, startCarBtn, stopCarBtn, carImage, road, finish);
     this.wrapper.append(car);

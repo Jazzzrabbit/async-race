@@ -1,43 +1,4 @@
-import { Car, createCar, updateCar } from '../../model/api';
-import GarageView from '../garage/garageView';
-
-function createNewCar(event: Event): void {
-  event.preventDefault();
-
-  const form = document.getElementById('createForm') as HTMLFormElement;
-  const name = form?.querySelector('[name="cname"]') as HTMLInputElement;
-  const color = form?.querySelector('[name="ccolor"]') as HTMLInputElement;
-
-  const obj: Car = {
-    name: name.value,
-    color: color.value,
-  };
-  
-  createCar(obj);
-  const view: GarageView = new GarageView();
-  view.render();
-  document.location.reload();
-}
-
-function editCar(event: Event): void {
-  event.preventDefault();
-
-  const form = document.getElementById('editForm') as HTMLFormElement;
-  const name = form.querySelector('[name="ename"]') as HTMLInputElement;
-  const color = form.querySelector('[name="ecolor"]') as HTMLInputElement;
-  const id = form.querySelector('[name="eid"]') as HTMLInputElement;
-
-  const obj: Car = {
-    name: name.value,
-    color: color.value,
-    id: +id.value,
-  };
-  
-  updateCar(obj);
-  const view: GarageView = new GarageView();
-  view.render();
-  document.location.reload();
-}
+import { editCar, createNewCar } from '../../controller/listeners';
 
 export default class ControlPanel {
   panel: HTMLElement;

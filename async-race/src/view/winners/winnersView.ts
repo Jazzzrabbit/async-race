@@ -20,10 +20,10 @@ export default class WinnersView {
                 <th>${item.time}</th>
               </tr>
       `;
-    });      
+    });     
   }
 
-  renderWinnersTable() {
+  renderWinnersTable(): void {
     const html = `
     <div class="title-wrapper">
       <h1 class="title winners__title">Winners (${carsCount})</h1>

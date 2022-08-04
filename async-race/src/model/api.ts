@@ -15,7 +15,7 @@ export type Car = {
   id?: number,
 };
 
-type Winners = {
+export type Winners = {
   cars: {
     car: Car,
     id: number,
@@ -66,12 +66,26 @@ export const createCar = async (data: Car): Promise<Car> => {
 };
 
 export const updateCar = async (data: Car): Promise<Car> => {
-  const response = await fetch(`${garage}/${data.id}`, {
+  const response: Response = await fetch(`${garage}/${data.id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
   });
   const updated: Promise<Car> = await response.json();
   return updated;
+};
+
+export const deleteCar = async (id: number): Promise<Response> => {
+  const response: Response = await fetch(`${garage}/${id}`, {
+    method: 'DELETE',
+  });
+  return response.json();
+};
+
+export const deleteWinner = async (id: number): Promise<Response> => {
+  const response: Response = await fetch(`${winners}/${id}`, {
+    method: 'DELETE',
+  });
+  return response.json();
 };
 
