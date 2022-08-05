@@ -18,13 +18,13 @@ export default class GarageView {
 
   renderCar(id: number | undefined, name: string, color: string): string {
     return `<div class="car" id="${id}">
+              <p class="car-name" id="${id}">${name}</p>
               <button class="select-car btn" id="${id}">Select</button>
               <button class="remove-car btn" id="${id}">Remove</button>
               <button class="start-car btn" id="${id}">Start</button>
               <button class="stop-car btn" id="${id}">Stop</button>
-              <p class="car-name" id="${id}">${name}</p>
-              <div class="road"></div>
               <div class="car-image" id="${id}">${GarageView.getCarImage(color)}</div>
+              <div class="road"></div>
               <div class="finish" id="${id}"></div>
             </div>`;
   }
@@ -41,7 +41,7 @@ export default class GarageView {
   render(): HTMLDivElement {
     this.wrapper.classList.add('garage-wrapper');
     this.wrapper.innerHTML = this.renderGarage();
-    
+
     return this.wrapper;
   }
 }

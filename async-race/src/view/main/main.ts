@@ -1,4 +1,3 @@
-import { nextPage } from '../../controller/listeners';
 import ControlPanel from '../control-panel/control-panel';
 import GarageView from '../garage/garageView';
 import WinnersView from '../winners/winnersView';
@@ -34,7 +33,6 @@ export default class Main {
     paginationWrapper.append(prevButton);
     paginationWrapper.append(nextButton);
 
-    nextButton.addEventListener('click', nextPage);
     this.main.append(paginationWrapper);
   }
 

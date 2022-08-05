@@ -1,4 +1,4 @@
-import { generateCars, getSelectCarId, removeCar } from '../controller/listeners';
+import { generateCars, getSelectCarId, removeCar, nextPage, prevPage } from '../controller/listeners';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
 import Main from '../view/main/main';
@@ -51,8 +51,16 @@ export default class App {
 
   addGenerateCarsListener(): void {
     const generate = document.querySelector('.buttons__generate') as HTMLButtonElement;
-    console.log(generate);
+
     generate.addEventListener('click', generateCars);
+  }
+
+  addPaginationListener(): void {
+    const nextPageBtn = document.querySelector('.next-btn') as HTMLButtonElement;
+    const prevPageBtn = document.querySelector('.prev-btn') as HTMLButtonElement;
+
+    nextPageBtn.addEventListener('click', nextPage);
+    prevPageBtn.addEventListener('click', prevPage);
   }
 
   init(): HTMLElement {
@@ -66,6 +74,7 @@ export default class App {
     this.addEditCarListener();
     this.addRemoveCarListener();
     this.addGenerateCarsListener();
+    this.addPaginationListener();
     return this.body;
   }
 }
