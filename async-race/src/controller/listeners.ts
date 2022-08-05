@@ -1,4 +1,5 @@
 import { createCar, deleteCar, deleteWinner, updateCar } from '../model/api';
+import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
 import { Car } from '../model/type';
 import GarageView from '../view/garage/garageView';
@@ -65,6 +66,47 @@ export async function removeCar(event: Event) {
   garage.innerHTML = garageView.renderGarage();
   winners.innerHTML = winnersView.renderWinnersTable();
   document.location.reload();
+}
+
+function generateRandomColor(): string {
+  const loop = 6;
+  const colors = '0123456789ABCDEF';
+  let output = '#';
+
+  for (let i = 0; i < loop; i++) {
+    const index: number = Math.floor(Math.random() * colors.length);
+    output += colors.charAt(index);
+  }
+
+  return output;
+}
+
+function generateRandomName(): string {
+  const numberOfCars = 57;
+  const index: number = Math.floor(Math.random() * numberOfCars);
+
+  return carBrand[index] + ' ' + carModel[index];
+}
+
+function generateCarsArray(): Car[] {
+  const output = new Array(100);
+
+  for (let i = 0; i < output.length; i++) {
+    output[i] = { name: generateRandomName(), color: generateRandomColor() };
+  }
+
+  return output;
+}
+
+export async function generateCars() {
+  const garage = document.querySelector('.garage-wrapper') as HTMLElement;
+  const garageView: GarageView = new GarageView();
+  const cars = generateCarsArray();
+
+  await Promise.all(cars.map(car => createCar(car)));
+  await updateCurrentState();
+  
+  garage.innerHTML = garageView.renderGarage();
 }
 
 export async function nextPage() {

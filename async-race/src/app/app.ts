@@ -1,4 +1,4 @@
-import { getSelectCarId, removeCar } from '../controller/listeners';
+import { generateCars, getSelectCarId, removeCar } from '../controller/listeners';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
 import Main from '../view/main/main';
@@ -49,6 +49,12 @@ export default class App {
     [...remove].map(item => item.addEventListener('click', removeCar));
   }
 
+  addGenerateCarsListener(): void {
+    const generate = document.querySelector('.buttons__generate') as HTMLButtonElement;
+    console.log(generate);
+    generate.addEventListener('click', generateCars);
+  }
+
   init(): HTMLElement {
     const header: HTMLElement = this.header.render();
     const main: HTMLElement = this.main.render();
@@ -59,6 +65,7 @@ export default class App {
     this.addChangePageListener();
     this.addEditCarListener();
     this.addRemoveCarListener();
+    this.addGenerateCarsListener();
     return this.body;
   }
 }
