@@ -23,8 +23,8 @@ export default class WinnersView {
     });     
   }
 
-  renderWinnersTable(): void {
-    const html = `
+  renderWinnersTable(): string {
+    return `
     <div class="title-wrapper">
       <h1 class="title winners__title">Winners (${carsCount})</h1>
       <h2 class="subtitle winners__subtitle">Page #n</h2>
@@ -44,12 +44,12 @@ export default class WinnersView {
       </tbody>
     </table>
     `;
-    this.wrapper.innerHTML = html;
+    // this.wrapper.innerHTML = html;
   }
 
   render(): HTMLDivElement {
     this.wrapper.classList.add('table-wrapper', 'hidden');
-    this.renderWinnersTable();
+    this.wrapper.innerHTML = this.renderWinnersTable();
     return this.wrapper;
   }
 }

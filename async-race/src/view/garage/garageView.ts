@@ -1,9 +1,5 @@
 import sprite from '../../assets/img/sprite.svg';
-import { getSelectCarId, removeCar } from '../../controller/listeners';
-import { getCars } from '../../model/api';
-import { Car } from '../../model/api';
-
-const { cars, carsCount } = await getCars();
+import { currentState } from '../../model/state';
 
 export default class GarageView {
   wrapper: HTMLDivElement;
@@ -20,70 +16,32 @@ export default class GarageView {
     `;
   }
 
-  renderTitle(): void {
-    const titleWrapper: HTMLDivElement = document.createElement('div');
-    const title: HTMLHeadingElement = document.createElement('h1');
-    const subtitle: HTMLHeadingElement = document.createElement('h2');
-
-    titleWrapper.classList.add('title-wrapper');
-    title.classList.add('title', 'garage__title');
-    subtitle.classList.add('subtitle', 'garage__subtitle');
-
-    title.textContent = `Garage (${carsCount})`;
-    subtitle.textContent = 'Page #1';
-    titleWrapper.append(title);
-    titleWrapper.append(subtitle);
-    this.wrapper.append(titleWrapper);
+  renderCar(id: number | undefined, name: string, color: string): string {
+    return `<div class="car" id="${id}">
+              <button class="select-car btn" id="${id}">Select</button>
+              <button class="remove-car btn" id="${id}">Remove</button>
+              <button class="start-car btn" id="${id}">Start</button>
+              <button class="stop-car btn" id="${id}">Stop</button>
+              <p class="car-name" id="${id}">${name}</p>
+              <div class="road"></div>
+              <div class="car-image" id="${id}">${GarageView.getCarImage(color)}</div>
+              <div class="finish" id="${id}"></div>
+            </div>`;
   }
 
-  renderCar(id: number | undefined, model: string, color: string): void {
-    const car: HTMLDivElement = document.createElement('div');
-    const selectCarBtn: HTMLButtonElement = document.createElement('button');
-    const removeCarBtn: HTMLButtonElement = document.createElement('button');
-    const startCarBtn: HTMLButtonElement = document.createElement('button');
-    const stopCarBtn: HTMLButtonElement = document.createElement('button');
-    const carName: HTMLParagraphElement = document.createElement('p');
-    const road: HTMLElement = document.createElement('div');
-    const carImage: HTMLDivElement = document.createElement('div');
-    const finish: HTMLDivElement = document.createElement('div');
-
-    car.classList.add('car');
-    selectCarBtn.classList.add('select-car', 'btn');
-    removeCarBtn.classList.add('remove-car', 'btn');
-    startCarBtn.classList.add('start-car', 'btn');
-    stopCarBtn.classList.add('stop-car', 'btn');
-    carName.classList.add('car-name');
-    road.classList.add('road');
-    carImage.classList.add('car-image');
-    finish.classList.add('finish');
-
-    car.id = `${id}`;
-    selectCarBtn.id = `${id}`;
-    removeCarBtn.id = `${id}`;
-    startCarBtn.id = `${id}`;
-    stopCarBtn.id = `${id}`;
-    carName.id = `${id}`;
-    carImage.id = `${id}`;
-    finish.id = `${id}`;
-
-    selectCarBtn.textContent = 'Select';
-    removeCarBtn.textContent = 'Remove';
-    startCarBtn.textContent = 'Start';
-    stopCarBtn.textContent = 'Stop';
-    carName.textContent = model;
-    carImage.innerHTML = GarageView.getCarImage(color);
-
-    selectCarBtn.addEventListener('click', getSelectCarId);
-    removeCarBtn.addEventListener('click', removeCar);
-
-    car.append(selectCarBtn, removeCarBtn, carName, startCarBtn, stopCarBtn, carImage, road, finish);
-    this.wrapper.append(car);
+  renderGarage(): string {
+    return `<div class="title-wrapper">
+              <h1 class="title garage__title">Garage (${currentState.carsCount})</h1>
+              <h2 class="subtitle garage__subtitle">Page #${currentState.page}</h2>
+            </div>
+            <div class="cars-wrapper">${currentState.cars.map((car) =>
+    this.renderCar(car.id, car.name, car.color)).join('')}</div>`;
   }
 
-  render(): HTMLElement {
+  render(): HTMLDivElement {
     this.wrapper.classList.add('garage-wrapper');
-    this.renderTitle();
-    cars.map((el: Car) => this.renderCar(el.id, el.name, el.color));
+    this.wrapper.innerHTML = this.renderGarage();
+    
     return this.wrapper;
   }
 }

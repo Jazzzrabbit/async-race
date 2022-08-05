@@ -1,3 +1,4 @@
+import { getSelectCarId, removeCar } from '../controller/listeners';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
 import Main from '../view/main/main';
@@ -18,7 +19,7 @@ export default class App {
     this.footer = new Footer();
   }
 
-  addChangePageListener() {
+  addChangePageListener(): void {
     const toGarage = document.querySelector('.nav__garageBtn') as HTMLButtonElement;
     const toWinners = document.querySelector('.nav__winnersBtn') as HTMLButtonElement;
     const cpanel = document.querySelector('.control-panel') as HTMLDivElement;
@@ -36,6 +37,18 @@ export default class App {
     });
   }
 
+  addEditCarListener(): void {
+    const select: NodeListOf<Element> = document.querySelectorAll('.select-car');
+
+    [...select].map(item => item.addEventListener('click', getSelectCarId));
+  }
+
+  addRemoveCarListener(): void {
+    const remove: NodeListOf<Element> = document.querySelectorAll('.remove-car');
+
+    [...remove].map(item => item.addEventListener('click', removeCar));
+  }
+
   init(): HTMLElement {
     const header: HTMLElement = this.header.render();
     const main: HTMLElement = this.main.render();
@@ -44,6 +57,8 @@ export default class App {
     this.body.append(main);
     this.body.append(footer);
     this.addChangePageListener();
+    this.addEditCarListener();
+    this.addRemoveCarListener();
     return this.body;
   }
 }

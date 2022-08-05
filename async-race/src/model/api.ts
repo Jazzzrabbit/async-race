@@ -1,40 +1,10 @@
+import { Cars, Car, Winners, Winner } from './type';
+
 const baseLink = 'http://127.0.0.1:3000';
 const garage = `${baseLink}/garage`;
 const winners = `${baseLink}/winners`;
 
-type Cars = {
-  cars: [
-    Car,
-  ],
-  carsCount: string | null,
-};
-
-export type Car = {
-  name: string,
-  color: string,
-  id?: number,
-};
-
-export type Winners = {
-  cars: {
-    car: Car,
-    id: number,
-    wins: number,
-    time: number,
-  }[],
-  carsCount: string | null,
-};
-
-type Winner = [
-  {
-    id: number,
-    wins: number,
-    time: number
-  },
-];
-
-
-export const getCars = async (page = 1, limit = 7): Promise<Cars> => {
+export const getCars = async (page: number, limit = 7): Promise<Cars> => {
   return fetch(`${garage}/?_page=${page}&_limit=${limit}`).then(async res => 
     ({ cars: await res.json(), carsCount: res.headers.get('X-Total-Count') }));
 };
