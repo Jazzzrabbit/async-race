@@ -1,3 +1,4 @@
+import App from '../app/app';
 import { createCar, deleteCar, deleteWinner, updateCar } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
@@ -24,6 +25,9 @@ export async function createNewCar(event: Event): Promise<void> {
   await updateCurrentState();
   
   garage.innerHTML = garageView.renderGarage();
+
+  App.addRemoveCarListener();
+  App.addEditCarListener();
 }
 
 export async function editCar(event: Event): Promise<void> {
@@ -46,7 +50,8 @@ export async function editCar(event: Event): Promise<void> {
   await updateCurrentState();
   garage.innerHTML = garageView.renderGarage();
 
-  document.location.reload();
+  App.addRemoveCarListener();
+  App.addEditCarListener();
 }
 
 export function getSelectCarId(event: Event): void {
@@ -56,7 +61,7 @@ export function getSelectCarId(event: Event): void {
   inputId.value = ((event.target as HTMLElement).getAttribute('id') as string);
 }
 
-export async function removeCar(event: Event) {
+export async function removeCar(event: Event): Promise<void> {
   const id = (event.target as HTMLElement).getAttribute('id') as string;
   const garageView: GarageView = new GarageView();
   const winnersView: WinnersView = new WinnersView();
@@ -67,9 +72,11 @@ export async function removeCar(event: Event) {
   await deleteWinner(+id);
   await updateCurrentState();
 
-  garage.innerHTML = garageView.renderGarage();
+  garage.innerHTML = garageView.renderGarage(); //после перерисовки слетает лиснер
   winners.innerHTML = winnersView.renderWinnersTable();
-  document.location.reload();
+
+  App.addRemoveCarListener();
+  App.addEditCarListener();
 }
 
 function generateRandomColor(): string {
@@ -102,7 +109,7 @@ function generateCarsArray(): Car[] {
   return output;
 }
 
-export async function generateCars() {
+export async function generateCars(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
   const garageView: GarageView = new GarageView();
   const cars: Car[] = generateCarsArray();
@@ -111,20 +118,38 @@ export async function generateCars() {
   await updateCurrentState();
   
   garage.innerHTML = garageView.renderGarage();
+
+  App.addRemoveCarListener(); //убрать в отдельную функцию
+  App.addEditCarListener();
 }
 
-export async function nextPage() {
+export async function nextPage(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
+  const winners = document.querySelector('.table-wrapper') as HTMLElement;
   const garageView: GarageView = new GarageView();
+  const winnersView: WinnersView = new WinnersView();
+  const carsCount = currentState.carsCount as string;
+  const currentPage: number = currentState.page; 
 
-  currentState.page++;
-  
-  await updateCurrentState();
-  
-  garage.innerHTML = garageView.renderGarage();
+  if (currentState.isGarage) {
+    if (7 * currentPage < +carsCount) {
+      currentState.page++;
+      await updateCurrentState();
+      garage.innerHTML = garageView.renderGarage(); //надо делать кнопку неактивной
+    }   
+  }
+
+  if (7 * currentPage < +carsCount) {
+    currentState.page++;
+    await updateCurrentState();
+    winners.innerHTML = winnersView.renderWinnersTable();
+  } 
+
+  App.addRemoveCarListener();
+  App.addEditCarListener();
 }
 
-export async function prevPage() {
+export async function prevPage(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
   const garageView: GarageView = new GarageView();
 
@@ -132,4 +157,7 @@ export async function prevPage() {
   
   await updateCurrentState();
   garage.innerHTML = garageView.renderGarage(); 
+
+  App.addRemoveCarListener();
+  App.addEditCarListener();
 }

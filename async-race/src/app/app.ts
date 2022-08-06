@@ -1,4 +1,5 @@
 import { generateCars, getSelectCarId, removeCar, nextPage, prevPage } from '../controller/listeners';
+import { currentState } from '../model/state';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
 import Main from '../view/main/main';
@@ -26,24 +27,28 @@ export default class App {
     const garage = document.querySelector('.garage-wrapper') as HTMLDivElement;
     const table = document.querySelector('.table-wrapper') as HTMLDivElement;
     toGarage?.addEventListener('click', () => {
+      currentState.isGarage = true;
+      currentState.isWinners = false;
       cpanel?.classList.remove('hidden');
       garage?.classList.remove('hidden');
       table?.classList.add('hidden');
     });
     toWinners?.addEventListener('click', () => {
+      currentState.isGarage = false;
+      currentState.isWinners = true;
       cpanel?.classList.add('hidden');
       garage?.classList.add('hidden');
       table?.classList.remove('hidden');
     });
   }
 
-  addEditCarListener(): void {
+  static addEditCarListener(): void {
     const select: NodeListOf<Element> = document.querySelectorAll('.select-car');
 
     [...select].map(item => item.addEventListener('click', getSelectCarId));
   }
 
-  addRemoveCarListener(): void {
+  static addRemoveCarListener(): void {
     const remove: NodeListOf<Element> = document.querySelectorAll('.remove-car');
 
     [...remove].map(item => item.addEventListener('click', removeCar));
@@ -71,8 +76,8 @@ export default class App {
     this.body.append(main);
     this.body.append(footer);
     this.addChangePageListener();
-    this.addEditCarListener();
-    this.addRemoveCarListener();
+    App.addEditCarListener();
+    App.addRemoveCarListener();
     this.addGenerateCarsListener();
     this.addPaginationListener();
     return this.body;

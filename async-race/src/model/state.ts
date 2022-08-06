@@ -8,10 +8,14 @@ type State = {
   page: number,
   cars: Car[],
   carsCount: string | null,
+  isGarage: boolean,
+  isWinners: boolean,
 };
 
 export const currentState: State = {
   page: 1,
   cars: cars,
   carsCount: carsCount,
+  isGarage: true,
+  isWinners: false,
 }; 
