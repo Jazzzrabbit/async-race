@@ -29,6 +29,7 @@ export async function createNewCar(event: Event): Promise<void> {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 export async function editCar(event: Event): Promise<void> {
@@ -54,6 +55,7 @@ export async function editCar(event: Event): Promise<void> {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 export function getSelectCarId(event: Event): void {
@@ -80,6 +82,7 @@ export async function removeCar(event: Event): Promise<void> {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 function generateRandomColor(): string {
@@ -125,6 +128,7 @@ export async function generateCars(): Promise<void> {
   App.addRemoveCarListener(); //убрать в отдельную функцию
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 export async function nextPage(): Promise<void> {
@@ -152,6 +156,7 @@ export async function nextPage(): Promise<void> {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 export async function prevPage(): Promise<void> {
@@ -166,6 +171,7 @@ export async function prevPage(): Promise<void> {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
+  App.addStopCarListener();
 }
 
 export async function startCar(event: Event): Promise<void> {
@@ -182,9 +188,15 @@ export async function startCar(event: Event): Promise<void> {
     car.style.transform = `translateX(${start}px)`;
     
     if (start < end) {
-      requestAnimationFrame(move);
+      currentState.animationId = window.requestAnimationFrame(move);
     }
   }
 
   window.requestAnimationFrame(move);
+}
+
+export function stopCar(): void {
+  const animationId: number = currentState.animationId;
+
+  window.cancelAnimationFrame(animationId);
 }

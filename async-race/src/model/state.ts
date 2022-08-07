@@ -10,6 +10,7 @@ type State = {
   carsCount: string | null,
   isGarage: boolean,
   isWinners: boolean,
+  animationId: number,
 };
 
 export const currentState: State = {
@@ -18,4 +19,5 @@ export const currentState: State = {
   carsCount: carsCount,
   isGarage: true,
   isWinners: false,
+  animationId: 0,
 }; 

@@ -1,4 +1,5 @@
-import { generateCars, getSelectCarId, removeCar, nextPage, prevPage, startCar } from '../controller/listeners';
+import { generateCars, getSelectCarId, removeCar, nextPage, 
+  prevPage, startCar, stopCar } from '../controller/listeners';
 import { currentState } from '../model/state';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
@@ -75,6 +76,12 @@ export default class App {
     [...start].map(item => item.addEventListener('click', startCar));
   }
 
+  static addStopCarListener(): void {
+    const stop: NodeListOf<Element> = document.querySelectorAll('.stop-car');
+
+    [...stop].map(item => item.addEventListener('click', stopCar));
+  }
+
   init(): HTMLElement {
     const header: HTMLElement = this.header.render();
     const main: HTMLElement = this.main.render();
@@ -86,6 +93,7 @@ export default class App {
     App.addEditCarListener();
     App.addRemoveCarListener();
     App.addStartCarListener();
+    App.addStopCarListener();
     this.addGenerateCarsListener();
     this.addPaginationListener();
     return this.body;
