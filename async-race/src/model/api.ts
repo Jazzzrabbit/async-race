@@ -3,6 +3,7 @@ import { Cars, Car, Winners, Winner } from './type';
 const baseLink = 'http://127.0.0.1:3000';
 const garage = `${baseLink}/garage`;
 const winners = `${baseLink}/winners`;
+const engine = `${baseLink}/engine`;
 
 export const getCars = async (page: number, limit = 7): Promise<Cars> => {
   return fetch(`${garage}/?_page=${page}&_limit=${limit}`).then(async res => 
@@ -56,6 +57,18 @@ export const deleteWinner = async (id: number): Promise<Response> => {
   const response: Response = await fetch(`${winners}/${id}`, {
     method: 'DELETE',
   });
+  return response.json();
+};
+
+export const startEngine = async (id: number, status: string): Promise<Response> => {
+  const response: Response = await fetch(`${engine}?id=${id}&status=${status}`, { method: 'PATCH' });
+
+  return response.json();
+};
+
+export const stopEngine = async (id: number, status: string): Promise<Response> => {
+  const response: Response = await fetch(`${engine}?id=${id}&status=${status}`, { method: 'PATCH' });
+
   return response.json();
 };
 

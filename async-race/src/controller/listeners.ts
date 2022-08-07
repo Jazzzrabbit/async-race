@@ -1,5 +1,5 @@
 import App from '../app/app';
-import { createCar, deleteCar, deleteWinner, updateCar } from '../model/api';
+import { createCar, deleteCar, deleteWinner, startEngine, updateCar } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
 import { Car } from '../model/type';
@@ -28,6 +28,7 @@ export async function createNewCar(event: Event): Promise<void> {
 
   App.addRemoveCarListener();
   App.addEditCarListener();
+  App.addStartCarListener();
 }
 
 export async function editCar(event: Event): Promise<void> {
@@ -52,17 +53,18 @@ export async function editCar(event: Event): Promise<void> {
 
   App.addRemoveCarListener();
   App.addEditCarListener();
+  App.addStartCarListener();
 }
 
 export function getSelectCarId(event: Event): void {
   const editForm = document.getElementById('editForm') as HTMLFormElement;
   const inputId = editForm.querySelector('[name="eid"]') as HTMLInputElement;
 
-  inputId.value = ((event.target as HTMLElement).getAttribute('id') as string);
+  inputId.value = ((event.target as HTMLElement).parentNode as HTMLElement).id;
 }
 
 export async function removeCar(event: Event): Promise<void> {
-  const id = (event.target as HTMLElement).getAttribute('id') as string;
+  const id = ((event.target as HTMLElement).parentNode as HTMLElement).id;
   const garageView: GarageView = new GarageView();
   const winnersView: WinnersView = new WinnersView();
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
@@ -77,6 +79,7 @@ export async function removeCar(event: Event): Promise<void> {
 
   App.addRemoveCarListener();
   App.addEditCarListener();
+  App.addStartCarListener();
 }
 
 function generateRandomColor(): string {
@@ -121,6 +124,7 @@ export async function generateCars(): Promise<void> {
 
   App.addRemoveCarListener(); //убрать в отдельную функцию
   App.addEditCarListener();
+  App.addStartCarListener();
 }
 
 export async function nextPage(): Promise<void> {
@@ -147,6 +151,7 @@ export async function nextPage(): Promise<void> {
 
   App.addRemoveCarListener();
   App.addEditCarListener();
+  App.addStartCarListener();
 }
 
 export async function prevPage(): Promise<void> {
@@ -160,4 +165,26 @@ export async function prevPage(): Promise<void> {
 
   App.addRemoveCarListener();
   App.addEditCarListener();
+  App.addStartCarListener();
+}
+
+export async function startCar(event: Event): Promise<void> {
+  let start = 0;
+  const id: string = ((event.target as HTMLElement).parentNode as HTMLElement).id;
+  const data: number[] = Object.values(await startEngine(+id, 'started'));
+  const time: number = +data[1] / +data[0];
+
+  function move(): void {
+    const car = document.getElementById(id)?.querySelector('.car-svg') as SVGAElement;
+
+    start += time / 1000;
+    const end: number = document.body.clientWidth - 100;
+    car.style.transform = `translateX(${start}px)`;
+    
+    if (start < end) {
+      requestAnimationFrame(move);
+    }
+  }
+
+  window.requestAnimationFrame(move);
 }
