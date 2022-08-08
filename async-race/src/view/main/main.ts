@@ -19,9 +19,9 @@ export default class Main {
   }
 
   renderPagination() {
-    const paginationWrapper = document.createElement('div');
-    const prevButton = document.createElement('button');
-    const nextButton = document.createElement('button');
+    const paginationWrapper: HTMLDivElement = document.createElement('div');
+    const prevButton: HTMLButtonElement = document.createElement('button');
+    const nextButton: HTMLButtonElement = document.createElement('button');
 
     paginationWrapper.classList.add('pagination-wrapper');
     prevButton.classList.add('btn', 'prev-btn');
@@ -37,9 +37,9 @@ export default class Main {
   }
 
   render(): HTMLElement {
-    const panel = this.controlPanel.render();
-    const garageView = this.garageView.render();
-    const winnersView = this.winnersView.render();
+    const panel: HTMLElement = this.controlPanel.render();
+    const garageView: HTMLDivElement = this.garageView.render();
+    const winnersView: HTMLDivElement = this.winnersView.render();
     this.main.classList.add('main');
     this.main.append(panel);
     this.main.append(garageView);

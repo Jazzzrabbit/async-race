@@ -5,11 +5,11 @@ export default class Footer {
     this.footer = document.createElement('footer');
   }
 
-  renderContent() {
-    const github = document.createElement('a');
-    const year = document.createElement('p');
-    const logo = document.createElement('div');
-    const logoLink = document.createElement('a');
+  renderContent(): void {
+    const github: HTMLAnchorElement = document.createElement('a');
+    const year: HTMLParagraphElement = document.createElement('p');
+    const logo: HTMLDivElement = document.createElement('div');
+    const logoLink: HTMLAnchorElement = document.createElement('a');
 
     github.classList.add('github');
     year.classList.add('year');
@@ -24,7 +24,7 @@ export default class Footer {
     this.footer.append(github, year, logoLink);
   }
 
-  render() {
+  render(): HTMLElement {
     this.footer.classList.add('footer');
     this.renderContent();
     return this.footer;

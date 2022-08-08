@@ -6,12 +6,12 @@ export default class Header {
   }
 
   renderNav(): void {
-    const nav = document.createElement('nav');
-    const garageBtn = document.createElement('a');
-    const winnersBtn = document.createElement('a');
+    const nav: HTMLElement = document.createElement('nav');
+    const garageBtn: HTMLAnchorElement = document.createElement('a');
+    const winnersBtn: HTMLAnchorElement = document.createElement('a');
     nav.classList.add('nav');
-    garageBtn.classList.add('nav__garageBtn', 'btn');
-    winnersBtn.classList.add('nav__winnersBtn', 'btn');
+    garageBtn.classList.add('nav__garage-btn', 'btn');
+    winnersBtn.classList.add('nav__winners-btn', 'btn');
     garageBtn.href = '#';
     winnersBtn.href = '#';
     garageBtn.textContent = 'Garage';

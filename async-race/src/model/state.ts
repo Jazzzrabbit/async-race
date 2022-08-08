@@ -1,17 +1,8 @@
 import { getCars } from './api';
-import { Car } from './type';
+import { State } from './type';
 
 
 const { cars, carsCount } = await getCars(1);
-
-type State = {
-  page: number,
-  cars: Car[],
-  carsCount: string | null,
-  isGarage: boolean,
-  isWinners: boolean,
-  animationId: number,
-};
 
 export const currentState: State = {
   page: 1,

@@ -26,3 +26,12 @@ export type Winner = [
     time: number
   },
 ];
+
+export type State = {
+  page: number,
+  cars: Car[],
+  carsCount: string | null,
+  isGarage: boolean,
+  isWinners: boolean,
+  animationId: number,
+};

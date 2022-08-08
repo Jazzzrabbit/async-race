@@ -1,11 +1,18 @@
 import App from '../app/app';
-import { createCar, deleteCar, deleteWinner, driveMode, startEngine, updateCar } from '../model/api';
+import { createCar, deleteCar, deleteWinner, driveMode, startEngine, stopEngine, updateCar } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
 import { Car } from '../model/type';
 import GarageView from '../view/garage/garageView';
 import WinnersView from '../view/winners/winnersView';
 import { updateCurrentState } from './updateCurrentState';
+
+function addListeners(): void {
+  App.addRemoveCarListener();
+  App.addEditCarListener();
+  App.addStartCarListener();
+  App.addStopCarListener();
+}
 
 export async function createNewCar(event: Event): Promise<void> {
   event.preventDefault();
@@ -26,10 +33,7 @@ export async function createNewCar(event: Event): Promise<void> {
   
   garage.innerHTML = garageView.renderGarage();
 
-  App.addRemoveCarListener();
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 export async function editCar(event: Event): Promise<void> {
@@ -52,10 +56,7 @@ export async function editCar(event: Event): Promise<void> {
   await updateCurrentState();
   garage.innerHTML = garageView.renderGarage();
 
-  App.addRemoveCarListener();
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 export function getSelectCarId(event: Event): void {
@@ -79,10 +80,7 @@ export async function removeCar(event: Event): Promise<void> {
   garage.innerHTML = garageView.renderGarage(); //после перерисовки слетает лиснер
   winners.innerHTML = winnersView.renderWinnersTable();
 
-  App.addRemoveCarListener();
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 function generateRandomColor(): string {
@@ -125,10 +123,7 @@ export async function generateCars(): Promise<void> {
   
   garage.innerHTML = garageView.renderGarage();
 
-  App.addRemoveCarListener(); //убрать в отдельную функцию
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 export async function nextPage(): Promise<void> {
@@ -153,10 +148,7 @@ export async function nextPage(): Promise<void> {
     winners.innerHTML = winnersView.renderWinnersTable();
   } 
 
-  App.addRemoveCarListener();
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 export async function prevPage(): Promise<void> {
@@ -168,10 +160,7 @@ export async function prevPage(): Promise<void> {
   await updateCurrentState();
   garage.innerHTML = garageView.renderGarage(); 
 
-  App.addRemoveCarListener();
-  App.addEditCarListener();
-  App.addStartCarListener();
-  App.addStopCarListener();
+  addListeners();
 }
 
 export async function startCar(event: Event): Promise<void> {
@@ -195,7 +184,7 @@ export async function startCar(event: Event): Promise<void> {
   window.requestAnimationFrame(move);
 }
 
-export function stopCar(): void {
+export function stopCar() {
   const animationId: number = currentState.animationId;
 
   window.cancelAnimationFrame(animationId);
@@ -204,7 +193,7 @@ export function stopCar(): void {
 export async function startRace(): Promise<void> {
   const cars: NodeListOf<Element> = document.querySelectorAll('.car');
 
-  [...cars].forEach(car => {
+  [...cars].forEach(async car => {
     async function innerStart(): Promise<void> {
       let start = 0;
       const id = car.getAttribute('id') as string;
@@ -226,9 +215,24 @@ export async function startRace(): Promise<void> {
     
       window.requestAnimationFrame(innerMove);
 
-      if (!response) window.cancelAnimationFrame(currentState.animationId);
+      if (!response) {
+        await stopEngine(+id, 'stopped');
+        window.cancelAnimationFrame(currentState.animationId);
+      }
     }
-    
+
     innerStart();
+  });
+}
+
+export function reset(): void {
+  const cars: NodeListOf<Element> = document.querySelectorAll('.car');
+
+  [...cars].forEach(async car => {
+    const carImage = car.querySelector('.car-svg') as HTMLElement;
+    const id = car.getAttribute('id') as string;
+    await stopEngine(+id, 'stopped');
+
+    carImage.style.transform = 'translateX(0px)';
   });
 }

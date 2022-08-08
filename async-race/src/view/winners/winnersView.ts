@@ -44,7 +44,6 @@ export default class WinnersView {
       </tbody>
     </table>
     `;
-    // this.wrapper.innerHTML = html;
   }
 
   render(): HTMLDivElement {

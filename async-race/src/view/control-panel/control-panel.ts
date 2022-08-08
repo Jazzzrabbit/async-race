@@ -1,5 +1,3 @@
-import { editCar, createNewCar } from '../../controller/listeners';
-
 export default class ControlPanel {
   panel: HTMLElement;
 
@@ -7,55 +5,20 @@ export default class ControlPanel {
     this.panel = document.createElement('div');
   }
 
-  renderPanel(): void {
-    const createForm: HTMLFormElement = document.createElement('form');
-    const editForm: HTMLFormElement = document.createElement('form');
-    const createAndEdit: HTMLElement = document.createElement('div');
-    const createInput:HTMLInputElement = document.createElement('input');
-    const createInputColor: HTMLInputElement = document.createElement('input');
-    const createButton: HTMLButtonElement = document.createElement('button');
-    const editInput: HTMLInputElement = document.createElement('input');
-    const editInputId: HTMLInputElement = document.createElement('input');
-    const editInputColor: HTMLInputElement = document.createElement('input');
-    const editButton: HTMLButtonElement = document.createElement('button');
-
-    createForm.classList.add('form');
-    editForm.classList.add('form');
-    createAndEdit.classList.add('create-and-edit');
-    createInput.classList.add('createInput', 'input');
-    createInputColor.classList.add('createInputColor', 'input');
-    createButton.classList.add('createBtn', 'btn');
-    editInput.classList.add('editInput', 'input');
-    editInputColor.classList.add('editInputColor', 'input');
-    editInputId.classList.add('input', 'hidden'); //создать скрытый инпут, куда записывать айди машины по клику
-    editButton.classList.add('editBtn', 'btn');
-
-    createInput.type = 'text';
-    createInput.autocomplete = 'off';
-    editInput.autocomplete = 'off';
-    editInput.type = 'text';
-    createForm.id = 'createForm';
-    editForm.id = 'editForm';
-    createInputColor.type = 'color';
-    editInputColor.type = 'color';
-    createInput.name = 'cname';
-    createInputColor.name = 'ccolor';
-    editInput.name = 'ename';
-    editInputColor.name = 'ecolor';
-    editInputId.name = 'eid';
-
-    createButton.textContent = 'Create';
-    editButton.textContent = 'Edit';
-    createButton.type = 'submit';
-    editButton.type = 'submit';
-
-    createForm.addEventListener('submit', createNewCar);
-    editForm.addEventListener('submit', editCar);
-
-    createForm.append(createInput, createInputColor, createButton);
-    editForm.append(editInput, editInputId, editInputColor, editButton);
-    createAndEdit.append(createForm, editForm);
-    this.panel.append(createAndEdit);
+  renderPanel(): string {
+    return `<div class="create-and-edit">
+              <div class="form" id="createForm">
+                <input type="text" class="create-input input" autocomplete="off" name="cname">
+                <input type="color" class="create-input-color input" name="ccolor">
+                <button type="submit" class="create-btn btn">Create</button>
+              </div>
+              <div class="form" id="editForm">
+                <input type="text" class="edit-input input" autocomplete="off" name="ename">
+                <input class="input hidden" name="eid">
+                <input type="color" class="edit-input-color input" name="ecolor">
+                <button type="submit" class="edit-btn btn">Edit</button>
+              </div>
+            </div>`;
   }
 
   renderControlButtons(): void {
@@ -78,9 +41,10 @@ export default class ControlPanel {
   }
 
   render(): HTMLElement {
-    this.renderPanel();
+    this.panel.innerHTML = this.renderPanel();
     this.renderControlButtons();
     this.panel.classList.add('control-panel');
+    
     return this.panel;
   }
 }

@@ -12,6 +12,7 @@ export const getCars = async (page: number, limit = 7): Promise<Cars> => {
 
 export const getCar = async (id: number): Promise<Car> => {
   const response: Response = await fetch(`${garage}/${id}`);
+
   return response.json();
 };
 
@@ -23,6 +24,7 @@ export const getWinners = async (page = 1, limit = 7, sort?: string[], order?: s
     cars: await Promise.all(data.map(async item => ({ ...item, car: await getCar(item.id) }))),
     carsCount: response.headers.get('X-Total-Count'),
   };
+
   return obj;
 };
 
@@ -33,6 +35,7 @@ export const createCar = async (data: Car): Promise<Car> => {
     headers: { 'Content-type': 'application/json' },
   });
   const car: Promise<Car> = await response.json();
+
   return car;
 };
 
@@ -43,6 +46,7 @@ export const updateCar = async (data: Car): Promise<Car> => {
     headers: { 'Content-Type': 'application/json' },
   });
   const updated: Promise<Car> = await response.json();
+
   return updated;
 };
 
@@ -50,6 +54,7 @@ export const deleteCar = async (id: number): Promise<Response> => {
   const response: Response = await fetch(`${garage}/${id}`, {
     method: 'DELETE',
   });
+
   return response.json();
 };
 
@@ -57,6 +62,7 @@ export const deleteWinner = async (id: number): Promise<Response> => {
   const response: Response = await fetch(`${winners}/${id}`, {
     method: 'DELETE',
   });
+  
   return response.json();
 };
 
@@ -72,10 +78,24 @@ export const stopEngine = async (id: number, status: string): Promise<Response> 
   return response.json();
 };
 
-export const driveMode = async (id: number, status: string): Promise<Response | boolean> => {
+export const driveMode = async (id: number, status: string): Promise<boolean> => {
   const response: Response = await fetch(`${engine}?id=${id}&status=${status}`, { method: 'PATCH' });
   
-  if (response.status === 500) return false;
-  return response.json();
+  switch (response.status) {
+    case (400): {
+      break;
+    }
+    case (404): {
+      break;
+    }
+    case (429): {
+      break;
+    }
+    case (500): {
+      return false;
+    }
+  }
+
+  return true;
 };
 

@@ -1,5 +1,5 @@
 import { generateCars, getSelectCarId, removeCar, nextPage, 
-  prevPage, startCar, stopCar, startRace } from '../controller/listeners';
+  prevPage, startCar, stopCar, startRace, reset, createNewCar, editCar } from '../controller/listeners';
 import { currentState } from '../model/state';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
@@ -23,8 +23,8 @@ export default class App {
   }
 
   addChangePageListener(): void {
-    const toGarage = document.querySelector('.nav__garageBtn') as HTMLButtonElement;
-    const toWinners = document.querySelector('.nav__winnersBtn') as HTMLButtonElement;
+    const toGarage = document.querySelector('.nav__garage-btn') as HTMLButtonElement;
+    const toWinners = document.querySelector('.nav__winners-btn') as HTMLButtonElement;
     const cpanel = document.querySelector('.control-panel') as HTMLDivElement;
     const garage = document.querySelector('.garage-wrapper') as HTMLDivElement;
     const table = document.querySelector('.table-wrapper') as HTMLDivElement;
@@ -82,10 +82,28 @@ export default class App {
     [...stop].map(item => item.addEventListener('click', stopCar));
   }
 
-  static addStartRaceListener(): void {
+  addStartRaceListener(): void {
     const race = document.querySelector('.buttons__race') as HTMLButtonElement;
 
     race.addEventListener('click', startRace);
+  }
+
+  addResetListener(): void {
+    const resetButton = document.querySelector('.buttons__reset') as HTMLButtonElement;
+    
+    resetButton.addEventListener('click', reset);
+  }
+
+  addCreateFormListener() {
+    const createForm = document.getElementById('createForm') as HTMLFormElement;
+
+    createForm.addEventListener('click', createNewCar);
+  }
+
+  addEditFormListener() {
+    const createForm = document.getElementById('editForm') as HTMLFormElement;
+
+    createForm.addEventListener('click', editCar);
   }
 
   init(): HTMLElement {
@@ -100,9 +118,12 @@ export default class App {
     App.addRemoveCarListener();
     App.addStartCarListener();
     App.addStopCarListener();
-    App.addStartRaceListener();
+    this.addResetListener();
+    this.addStartRaceListener();
     this.addGenerateCarsListener();
     this.addPaginationListener();
+    this.addCreateFormListener();
+    this.addEditFormListener();
     return this.body;
   }
 }

@@ -16,7 +16,7 @@ const plugins = [
     template: 'src/index.html',
   }),
   new MiniCssExtractPlugin({
-    filename: '[name].[contenthash].css',
+    filename: '[name].css',
   }),
   new CleanWebpackPlugin(),
   new ESLintWebpackPlugin({ extensions: 'ts' }),
