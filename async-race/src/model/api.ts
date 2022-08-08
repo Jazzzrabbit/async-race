@@ -72,3 +72,10 @@ export const stopEngine = async (id: number, status: string): Promise<Response> 
   return response.json();
 };
 
+export const driveMode = async (id: number, status: string): Promise<Response | boolean> => {
+  const response: Response = await fetch(`${engine}?id=${id}&status=${status}`, { method: 'PATCH' });
+  
+  if (response.status === 500) return false;
+  return response.json();
+};
+

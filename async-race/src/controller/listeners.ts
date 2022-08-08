@@ -1,5 +1,5 @@
 import App from '../app/app';
-import { createCar, deleteCar, deleteWinner, startEngine, updateCar } from '../model/api';
+import { createCar, deleteCar, deleteWinner, driveMode, startEngine, updateCar } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
 import { Car } from '../model/type';
@@ -221,9 +221,14 @@ export async function startRace(): Promise<void> {
           currentState.animationId = window.requestAnimationFrame(innerMove);
         }
       }      
+
+      const response = await driveMode(+id, 'drive');
     
       window.requestAnimationFrame(innerMove);
+
+      if (!response) window.cancelAnimationFrame(currentState.animationId);
     }
+    
     innerStart();
   });
 }
