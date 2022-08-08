@@ -176,7 +176,7 @@ export async function prevPage(): Promise<void> {
 
 export async function startCar(event: Event): Promise<void> {
   let start = 0;
-  const id: string = ((event.target as HTMLElement).parentNode as HTMLElement).id;
+  const id: string = (((event as Event).target as HTMLElement).parentNode as HTMLElement).id;
   const data: number[] = Object.values(await startEngine(+id, 'started'));
   const time: number = +data[1] / +data[0];
 
@@ -199,4 +199,31 @@ export function stopCar(): void {
   const animationId: number = currentState.animationId;
 
   window.cancelAnimationFrame(animationId);
+}
+
+export async function startRace(): Promise<void> {
+  const cars: NodeListOf<Element> = document.querySelectorAll('.car');
+
+  [...cars].forEach(car => {
+    async function innerStart(): Promise<void> {
+      let start = 0;
+      const id = car.getAttribute('id') as string;
+      const data: number[] = Object.values(await startEngine(+id, 'started'));
+      const time: number = +data[1] / +data[0];
+      function innerMove(): void {
+        const innerCar = document.getElementById(id)?.querySelector('.car-svg') as SVGAElement;
+    
+        start += time / 1000;
+        const end: number = document.body.clientWidth - 100;
+        innerCar.style.transform = `translateX(${start}px)`;
+        
+        if (start < end) {
+          currentState.animationId = window.requestAnimationFrame(innerMove);
+        }
+      }      
+    
+      window.requestAnimationFrame(innerMove);
+    }
+    innerStart();
+  });
 }

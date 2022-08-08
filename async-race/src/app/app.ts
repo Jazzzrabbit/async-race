@@ -1,5 +1,5 @@
 import { generateCars, getSelectCarId, removeCar, nextPage, 
-  prevPage, startCar, stopCar } from '../controller/listeners';
+  prevPage, startCar, stopCar, startRace } from '../controller/listeners';
 import { currentState } from '../model/state';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
@@ -82,6 +82,12 @@ export default class App {
     [...stop].map(item => item.addEventListener('click', stopCar));
   }
 
+  static addStartRaceListener(): void {
+    const race = document.querySelector('.buttons__race') as HTMLButtonElement;
+
+    race.addEventListener('click', startRace);
+  }
+
   init(): HTMLElement {
     const header: HTMLElement = this.header.render();
     const main: HTMLElement = this.main.render();
@@ -94,6 +100,7 @@ export default class App {
     App.addRemoveCarListener();
     App.addStartCarListener();
     App.addStopCarListener();
+    App.addStartRaceListener();
     this.addGenerateCarsListener();
     this.addPaginationListener();
     return this.body;
