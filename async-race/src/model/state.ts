@@ -11,4 +11,5 @@ export const currentState: State = {
   isGarage: true,
   isWinners: false,
   animationId: 0,
+  currentWinner: null,
 }; 

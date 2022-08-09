@@ -34,4 +34,10 @@ export type State = {
   isGarage: boolean,
   isWinners: boolean,
   animationId: number,
+  currentWinner: number | null, 
+};
+
+export type Success = {
+  success: boolean, 
+  id?: number | undefined,
 };

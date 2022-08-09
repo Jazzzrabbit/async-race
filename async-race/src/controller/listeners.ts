@@ -2,7 +2,7 @@ import App from '../app/app';
 import { createCar, deleteCar, deleteWinner, driveMode, startEngine, stopEngine, updateCar } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
-import { Car } from '../model/type';
+import { Car, Success } from '../model/type';
 import GarageView from '../view/garage/garageView';
 import WinnersView from '../view/winners/winnersView';
 import { updateCurrentState } from './updateCurrentState';
@@ -77,7 +77,7 @@ export async function removeCar(event: Event): Promise<void> {
   await deleteWinner(+id);
   await updateCurrentState();
 
-  garage.innerHTML = garageView.renderGarage(); //после перерисовки слетает лиснер
+  garage.innerHTML = garageView.renderGarage(); 
   winners.innerHTML = winnersView.renderWinnersTable();
 
   addListeners();
@@ -138,7 +138,7 @@ export async function nextPage(): Promise<void> {
     if (7 * currentPage < +carsCount) {
       currentState.page++;
       await updateCurrentState();
-      garage.innerHTML = garageView.renderGarage(); //надо делать кнопку неактивной
+      garage.innerHTML = garageView.renderGarage(); 
     }   
   }
 
@@ -184,48 +184,57 @@ export async function startCar(event: Event): Promise<void> {
   window.requestAnimationFrame(move);
 }
 
-export function stopCar() {
+export function stopCar(): void {
   const animationId: number = currentState.animationId;
 
   window.cancelAnimationFrame(animationId);
 }
 
+async function innerStart(car: Element): Promise<void> { 
+  currentState.currentWinner = null;
+  let start = 0;
+  const id = car.getAttribute('id') as string;
+  const data: number[] = Object.values(await startEngine(+id, 'started'));
+  const time: number = +data[1] / +data[0];
+  
+  function innerMove(): void {
+    const innerCar = document.getElementById(id)?.querySelector('.car-svg') as SVGAElement;
+    start += time / 1000;
+    const end: number = document.body.clientWidth - 100;
+    innerCar.style.transform = `translateX(${start}px)`;
+    
+    if (start < end) {
+      currentState.animationId = window.requestAnimationFrame(innerMove);
+    }
+  }      
+
+  const response: Success = await driveMode(+id, 'drive');
+  
+  window.requestAnimationFrame(innerMove);
+
+  if (!response.success) {
+    await stopEngine(+id, 'stopped');
+    window.cancelAnimationFrame(currentState.animationId);
+  } else {
+    if (currentState.currentWinner === null) currentState.currentWinner = response.id as number;
+  }
+}
+
 export async function startRace(): Promise<void> {
   const cars: NodeListOf<Element> = document.querySelectorAll('.car');
 
-  [...cars].forEach(async car => {
-    async function innerStart(): Promise<void> {
-      let start = 0;
-      const id = car.getAttribute('id') as string;
-      const data: number[] = Object.values(await startEngine(+id, 'started'));
-      const time: number = +data[1] / +data[0];
-      function innerMove(): void {
-        const innerCar = document.getElementById(id)?.querySelector('.car-svg') as SVGAElement;
-    
-        start += time / 1000;
-        const end: number = document.body.clientWidth - 100;
-        innerCar.style.transform = `translateX(${start}px)`;
-        
-        if (start < end) {
-          currentState.animationId = window.requestAnimationFrame(innerMove);
-        }
-      }      
-
-      const response = await driveMode(+id, 'drive');
-    
-      window.requestAnimationFrame(innerMove);
-
-      if (!response) {
-        await stopEngine(+id, 'stopped');
-        window.cancelAnimationFrame(currentState.animationId);
-      }
+  await Promise.all([...cars].map(async car => innerStart(car)));
+  
+  setTimeout(() => {
+    if (currentState.currentWinner !== null) {
+      const winner = document.getElementById(currentState.currentWinner.toString()) as HTMLElement;
+      alert('And the winner is ' + winner.querySelector('.car-name')?.textContent + '!');
     }
-
-    innerStart();
-  });
-}
+  }, 300);
+} 
 
 export function reset(): void {
+  currentState.currentWinner = null;
   const cars: NodeListOf<Element> = document.querySelectorAll('.car');
 
   [...cars].forEach(async car => {

@@ -1,4 +1,4 @@
-import { Cars, Car, Winners, Winner } from './type';
+import { Cars, Car, Winners, Winner, Success } from './type';
 
 const baseLink = 'http://127.0.0.1:3000';
 const garage = `${baseLink}/garage`;
@@ -78,7 +78,7 @@ export const stopEngine = async (id: number, status: string): Promise<Response> 
   return response.json();
 };
 
-export const driveMode = async (id: number, status: string): Promise<boolean> => {
+export const driveMode = async (id: number, status: string): Promise<Success> => {
   const response: Response = await fetch(`${engine}?id=${id}&status=${status}`, { method: 'PATCH' });
   
   switch (response.status) {
@@ -92,10 +92,10 @@ export const driveMode = async (id: number, status: string): Promise<boolean> =>
       break;
     }
     case (500): {
-      return false;
+      return { success: false };
     }
   }
-
-  return true;
+  
+  return { success: true, id: id };
 };
 
