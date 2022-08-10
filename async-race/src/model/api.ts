@@ -16,7 +16,7 @@ export const getCar = async (id: number): Promise<Car> => {
   return response.json();
 };
 
-export const getWinners = async (page = 1, limit = 7, sort?: string[], order?: string[]): Promise<Winners> => {
+export const getWinners = async (page: number, limit = 10, sort?: string[], order?: string[]): Promise<Winners> => {
   const response: Response = await fetch(`${winners}/?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
   const data: Winner = await response.json();
 

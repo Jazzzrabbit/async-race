@@ -3,7 +3,7 @@ import { State } from './type';
 
 
 const { cars, carsCount } = await getCars(1);
-const { winners, winnersCount } = await getWinners();
+const { winners, winnersCount } = await getWinners(1);
 
 export const currentState: State = {
   page: 1,

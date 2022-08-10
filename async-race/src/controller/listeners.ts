@@ -133,7 +133,9 @@ export async function nextPage(): Promise<void> {
   const garageView: GarageView = new GarageView();
   const winnersView: WinnersView = new WinnersView();
   const carsCount = currentState.carsCount as string;
+  const winnersCount = currentState.winnersCount as string;
   const currentPage: number = currentState.page; 
+  const currentWinnersPage: number = currentState.winnersPage;
 
   if (currentState.isGarage) {
     if (7 * currentPage < +carsCount) {
@@ -141,25 +143,32 @@ export async function nextPage(): Promise<void> {
       await updateCurrentState();
       garage.innerHTML = garageView.renderGarage(); 
     }   
+  } else {
+    if (10 * currentWinnersPage < +winnersCount) {
+      currentState.winnersPage++;
+      await updateCurrentState();
+      winners.innerHTML = winnersView.renderWinnersTable();
+    } 
   }
-
-  if (7 * currentPage < +carsCount) {
-    currentState.page++;
-    await updateCurrentState();
-    winners.innerHTML = winnersView.renderWinnersTable();
-  } 
 
   addListeners();
 }
 
 export async function prevPage(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
+  const winners = document.querySelector('.table-wrapper') as HTMLElement;
   const garageView: GarageView = new GarageView();
+  const winnersView: WinnersView = new WinnersView();
 
-  if (currentState.page > 1) currentState.page--;
+  if (currentState.isGarage) {
+    if (currentState.page > 1) currentState.page--;
+  } else {
+    if (currentState.winnersPage > 1) currentState.winnersPage--;
+  }
   
   await updateCurrentState();
   garage.innerHTML = garageView.renderGarage(); 
+  winners.innerHTML = winnersView.renderWinnersTable();
 
   addListeners();
 }

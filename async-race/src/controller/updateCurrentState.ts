@@ -3,7 +3,7 @@ import { currentState } from '../model/state';
 
 export async function updateCurrentState(): Promise<void> {
   const { cars, carsCount } = await getCars(currentState.page);
-  const { winners, winnersCount } = await getWinners();
+  const { winners, winnersCount } = await getWinners(currentState.winnersPage);
 
   currentState.cars = cars;
   currentState.carsCount = carsCount;
