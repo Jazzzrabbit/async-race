@@ -1,7 +1,5 @@
-import { getWinners } from '../../model/api';
+import { currentState } from '../../model/state';
 import GarageView from '../garage/garageView';
-
-const { cars, carsCount } = await getWinners();
 
 export default class WinnersView {
   wrapper: HTMLDivElement;
@@ -10,8 +8,8 @@ export default class WinnersView {
     this.wrapper = document.createElement('div');
   }
 
-  renderWinner(): string[] {
-    return cars.map(item => {
+  renderWinner(): string {
+    return currentState.winners.map(item => {
       return `<tr>
                 <th>${item.id}</th>
                 <th>${GarageView.getCarImage(item.car.color)}</th>
@@ -20,14 +18,14 @@ export default class WinnersView {
                 <th>${item.time}</th>
               </tr>
       `;
-    });     
+    }).join('');     
   }
 
   renderWinnersTable(): string {
     return `
     <div class="title-wrapper">
-      <h1 class="title winners__title">Winners (${carsCount})</h1>
-      <h2 class="subtitle winners__subtitle">Page #n</h2>
+      <h1 class="title winners__title">Winners (${currentState.winnersCount})</h1>
+      <h2 class="subtitle winners__subtitle">Page #${currentState.winnersPage}</h2>
     </div>
     <table class="table">
       <thead>

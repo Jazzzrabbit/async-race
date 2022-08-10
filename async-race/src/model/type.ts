@@ -10,18 +10,18 @@ export type Car = {
 };
 
 export type Winners = {
-  cars: {
+  winners: {
     car: Car,
-    id: number,
+    id: number | null,
     wins: number,
     time: number,
   }[],
-  carsCount: string | null,
+  winnersCount: string | null,
 };
 
 export type Winner = [
   {
-    id: number,
+    id: number | null,
     wins: number,
     time: number
   },
@@ -34,7 +34,19 @@ export type State = {
   isGarage: boolean,
   isWinners: boolean,
   animationId: number,
-  currentWinner: number | null, 
+  currentWinner: {
+    id: number | null,
+    wins: number,
+    time: number,
+  },
+  winners: {
+    car: Car,
+    id: number | null,
+    wins: number,
+    time: number,
+  }[],
+  winnersCount: string | null,
+  winnersPage: number,
 };
 
 export type Success = {

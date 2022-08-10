@@ -21,8 +21,8 @@ export const getWinners = async (page = 1, limit = 7, sort?: string[], order?: s
   const data: Winner = await response.json();
 
   const obj: Winners = {
-    cars: await Promise.all(data.map(async item => ({ ...item, car: await getCar(item.id) }))),
-    carsCount: response.headers.get('X-Total-Count'),
+    winners: await Promise.all(data.map(async item => ({ ...item, car: await getCar(item.id as number) }))),
+    winnersCount: response.headers.get('X-Total-Count'),
   };
 
   return obj;
@@ -98,4 +98,26 @@ export const driveMode = async (id: number, status: string): Promise<Success> =>
   
   return { success: true, id: id };
 };
+
+export const createWinner = async (data: { id: number | null, wins: number, time: number }): Promise<Response> => {
+  const response: Response = await fetch(winners, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  
+  return response.status !== 500 ? response.json() : null;
+};
+
+export const updateWinner = 
+  async (id: number, data: { id: number | null, wins: number, time: number }): Promise<Response> => {
+    const response: Response = await fetch(`${winners}/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const updated: Response = await response.json();
+    
+    return updated;
+  };
 

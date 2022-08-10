@@ -1,5 +1,6 @@
 import App from '../app/app';
-import { createCar, deleteCar, deleteWinner, driveMode, startEngine, stopEngine, updateCar } from '../model/api';
+import { createCar, createWinner, deleteCar, deleteWinner, driveMode, 
+  startEngine, stopEngine, updateCar, updateWinner } from '../model/api';
 import { carBrand, carModel } from '../model/randomCars';
 import { currentState } from '../model/state';
 import { Car, Success } from '../model/type';
@@ -190,8 +191,25 @@ export function stopCar(): void {
   window.cancelAnimationFrame(animationId);
 }
 
+async function updateWinnersTable(): Promise<void> {
+  currentState.winners.map(async winner => {
+    if (winner.id === currentState.currentWinner.id) {
+      await updateWinner(winner.id as number, {
+        id: currentState.currentWinner.id,
+        wins: currentState.currentWinner.wins + 1,
+        time: currentState.currentWinner.time < winner.time ? currentState.currentWinner.time : winner.time,
+      });
+    } else await createWinner(currentState.currentWinner);
+  });
+
+  await updateCurrentState();
+  const winnersView: WinnersView = new WinnersView();
+  const winners = document.querySelector('.table-wrapper') as HTMLElement;
+  winners.innerHTML = winnersView.renderWinnersTable();
+}
+
 async function innerStart(car: Element): Promise<void> { 
-  currentState.currentWinner = null;
+  currentState.currentWinner = { id: null, wins: 0, time: 0  };
   let start = 0;
   const id = car.getAttribute('id') as string;
   const data: number[] = Object.values(await startEngine(+id, 'started'));
@@ -216,7 +234,14 @@ async function innerStart(car: Element): Promise<void> {
     await stopEngine(+id, 'stopped');
     window.cancelAnimationFrame(currentState.animationId);
   } else {
-    if (currentState.currentWinner === null) currentState.currentWinner = response.id as number;
+    if (currentState.currentWinner.id === null) {
+      currentState.currentWinner = { 
+        id: response.id as number, 
+        wins: 1, 
+        time: +(time / 1000).toFixed(2), 
+      };
+      await updateWinnersTable();
+    }  
   }
 }
 
@@ -226,15 +251,15 @@ export async function startRace(): Promise<void> {
   await Promise.all([...cars].map(async car => innerStart(car)));
   
   setTimeout(() => {
-    if (currentState.currentWinner !== null) {
-      const winner = document.getElementById(currentState.currentWinner.toString()) as HTMLElement;
+    if (currentState.currentWinner.id !== null) {
+      const winner = document.getElementById(currentState.currentWinner.id.toString()) as HTMLElement;
       alert('And the winner is ' + winner.querySelector('.car-name')?.textContent + '!');
     }
   }, 300);
 } 
 
 export function reset(): void {
-  currentState.currentWinner = null;
+  currentState.currentWinner = { id: null, wins: 0, time: 0  };
   const cars: NodeListOf<Element> = document.querySelectorAll('.car');
 
   [...cars].forEach(async car => {
