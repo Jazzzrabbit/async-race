@@ -22,7 +22,7 @@ export default class GarageView {
               <button class="select-car btn">Select</button>
               <button class="remove-car btn">Remove</button>
               <button class="start-car btn">Start</button>
-              <button class="stop-car btn">Stop</button>
+              <button class="stop-car btn" disabled=true>Stop</button>
               <div class="car-image">${GarageView.getCarImage(color)}</div>
               <div class="road"></div>
               <div class="finish""></div>

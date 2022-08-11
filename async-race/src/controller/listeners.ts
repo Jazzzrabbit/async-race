@@ -167,6 +167,11 @@ export async function prevPage(): Promise<void> {
 }
 
 export async function startCar(event: Event): Promise<void> {
+  const stopBtn = (event.target as Element).parentElement?.querySelector('.stop-car') as HTMLButtonElement;
+  const startBtn = (event.target as Element).parentElement?.querySelector('.start-car') as HTMLButtonElement;
+  stopBtn.disabled = false;
+  startBtn.disabled = true;
+  
   let start = 0;
   const id: string = (((event as Event).target as HTMLElement).parentNode as HTMLElement).id;
   const data: number[] = Object.values(await startEngine(+id, 'started'));
@@ -187,10 +192,19 @@ export async function startCar(event: Event): Promise<void> {
   window.requestAnimationFrame(move);
 }
 
-export function stopCar(): void {
+export async function stopCar(event: Event): Promise<void> {
+  const startBtn = (event.target as Element).parentElement?.querySelector('.start-car') as HTMLButtonElement;
+  const stopBtn = (event.target as Element).parentElement?.querySelector('.stop-car') as HTMLButtonElement;
+  startBtn.disabled = false;
+  
   const animationId: number = currentState.animationId;
+  const carImage = (event.target as Element).parentElement?.querySelector('.car-svg') as HTMLElement;
+  const id = (event.target as Element).parentElement?.getAttribute('id') as string;
 
   window.cancelAnimationFrame(animationId);
+  carImage.style.transform = 'translateX(0px)';
+  stopBtn.disabled = true;
+  await stopEngine(+id, 'stopped');
 }
 
 async function updateWinnersTable(): Promise<void> {
@@ -268,6 +282,7 @@ export function reset(): void {
     const id = car.getAttribute('id') as string;
     await stopEngine(+id, 'stopped');
 
+    (car.querySelector('.start-car') as HTMLButtonElement).disabled = false;
     carImage.style.transform = 'translateX(0px)';
   });
 }
