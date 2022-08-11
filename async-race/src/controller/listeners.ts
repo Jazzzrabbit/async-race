@@ -13,6 +13,8 @@ function addListeners(): void {
   App.addEditCarListener();
   App.addStartCarListener();
   App.addStopCarListener();
+  App.addSortByTimeListener();
+  App.addSortByWinsListener();
 }
 
 export async function createNewCar(event: Event): Promise<void> {
@@ -22,7 +24,6 @@ export async function createNewCar(event: Event): Promise<void> {
   const name = form.querySelector('[name="cname"]') as HTMLInputElement;
   const color = form.querySelector('[name="ccolor"]') as HTMLInputElement;
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
-  const garageView: GarageView = new GarageView();
 
   const obj: Car = {
     name: name.value,
@@ -32,7 +33,7 @@ export async function createNewCar(event: Event): Promise<void> {
   await createCar(obj);
   await updateCurrentState();
   
-  garage.innerHTML = garageView.renderGarage();
+  garage.innerHTML = GarageView.renderGarage();
 
   addListeners();
 }
@@ -45,7 +46,6 @@ export async function editCar(event: Event): Promise<void> {
   const color = form.querySelector('[name="ecolor"]') as HTMLInputElement;
   const id = form.querySelector('[name="eid"]') as HTMLInputElement;
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
-  const garageView: GarageView = new GarageView();
 
   const obj: Car = {
     name: name.value,
@@ -55,7 +55,7 @@ export async function editCar(event: Event): Promise<void> {
 
   await updateCar(obj);
   await updateCurrentState();
-  garage.innerHTML = garageView.renderGarage();
+  garage.innerHTML = GarageView.renderGarage();
 
   addListeners();
 }
@@ -69,8 +69,6 @@ export function getSelectCarId(event: Event): void {
 
 export async function removeCar(event: Event): Promise<void> {
   const id = ((event.target as HTMLElement).parentNode as HTMLElement).id;
-  const garageView: GarageView = new GarageView();
-  const winnersView: WinnersView = new WinnersView();
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
   const winners = document.querySelector('.table-wrapper') as HTMLElement;
 
@@ -78,8 +76,8 @@ export async function removeCar(event: Event): Promise<void> {
   await deleteWinner(+id);
   await updateCurrentState();
 
-  garage.innerHTML = garageView.renderGarage(); 
-  winners.innerHTML = winnersView.renderWinnersTable();
+  garage.innerHTML = GarageView.renderGarage(); 
+  winners.innerHTML = WinnersView.renderWinnersTable();
 
   addListeners();
 }
@@ -116,13 +114,12 @@ function generateCarsArray(): Car[] {
 
 export async function generateCars(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
-  const garageView: GarageView = new GarageView();
   const cars: Car[] = generateCarsArray();
 
   await Promise.all(cars.map(car => createCar(car)));
   await updateCurrentState();
   
-  garage.innerHTML = garageView.renderGarage();
+  garage.innerHTML = GarageView.renderGarage();
 
   addListeners();
 }
@@ -130,8 +127,6 @@ export async function generateCars(): Promise<void> {
 export async function nextPage(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
   const winners = document.querySelector('.table-wrapper') as HTMLElement;
-  const garageView: GarageView = new GarageView();
-  const winnersView: WinnersView = new WinnersView();
   const carsCount = currentState.carsCount as string;
   const winnersCount = currentState.winnersCount as string;
   const currentPage: number = currentState.page; 
@@ -141,13 +136,13 @@ export async function nextPage(): Promise<void> {
     if (7 * currentPage < +carsCount) {
       currentState.page++;
       await updateCurrentState();
-      garage.innerHTML = garageView.renderGarage(); 
+      garage.innerHTML = GarageView.renderGarage(); 
     }   
   } else {
     if (10 * currentWinnersPage < +winnersCount) {
       currentState.winnersPage++;
       await updateCurrentState();
-      winners.innerHTML = winnersView.renderWinnersTable();
+      winners.innerHTML = WinnersView.renderWinnersTable();
     } 
   }
 
@@ -157,8 +152,6 @@ export async function nextPage(): Promise<void> {
 export async function prevPage(): Promise<void> {
   const garage = document.querySelector('.garage-wrapper') as HTMLElement;
   const winners = document.querySelector('.table-wrapper') as HTMLElement;
-  const garageView: GarageView = new GarageView();
-  const winnersView: WinnersView = new WinnersView();
 
   if (currentState.isGarage) {
     if (currentState.page > 1) currentState.page--;
@@ -167,8 +160,8 @@ export async function prevPage(): Promise<void> {
   }
   
   await updateCurrentState();
-  garage.innerHTML = garageView.renderGarage(); 
-  winners.innerHTML = winnersView.renderWinnersTable();
+  garage.innerHTML = GarageView.renderGarage(); 
+  winners.innerHTML = WinnersView.renderWinnersTable();
 
   addListeners();
 }
@@ -212,9 +205,8 @@ async function updateWinnersTable(): Promise<void> {
   });
 
   await updateCurrentState();
-  const winnersView: WinnersView = new WinnersView();
   const winners = document.querySelector('.table-wrapper') as HTMLElement;
-  winners.innerHTML = winnersView.renderWinnersTable();
+  winners.innerHTML = WinnersView.renderWinnersTable();
 }
 
 async function innerStart(car: Element): Promise<void> { 
@@ -278,4 +270,28 @@ export function reset(): void {
 
     carImage.style.transform = 'translateX(0px)';
   });
+}
+
+export async function sortByTime(): Promise<void> {
+  const winners = document.querySelector('.table-wrapper') as HTMLElement;
+
+  currentState.sortBy = 'time';
+  currentState.sortOrder = currentState.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+
+  await updateCurrentState();
+
+  winners.innerHTML = WinnersView.renderWinnersTable();
+  addListeners();
+}
+
+export async function sortByWins(): Promise<void> {
+  const winners = document.querySelector('.table-wrapper') as HTMLElement;
+
+  currentState.sortBy = 'wins';
+  currentState.sortOrder = currentState.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+  
+  await updateCurrentState();
+
+  winners.innerHTML = WinnersView.renderWinnersTable();
+  addListeners();
 }

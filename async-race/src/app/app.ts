@@ -1,5 +1,6 @@
 import { generateCars, getSelectCarId, removeCar, nextPage, 
-  prevPage, startCar, stopCar, startRace, reset, createNewCar, editCar } from '../controller/listeners';
+  prevPage, startCar, stopCar, startRace, reset, createNewCar, editCar,
+  sortByTime, sortByWins } from '../controller/listeners';
 import { currentState } from '../model/state';
 import Footer from '../view/footer/footer';
 import Header from '../view/header/header';
@@ -94,16 +95,28 @@ export default class App {
     resetButton.addEventListener('click', reset);
   }
 
-  addCreateFormListener() {
+  addCreateFormListener(): void {
     const createForm = document.getElementById('createForm') as HTMLFormElement;
 
     createForm.addEventListener('click', createNewCar);
   }
 
-  addEditFormListener() {
+  addEditFormListener(): void {
     const createForm = document.getElementById('editForm') as HTMLFormElement;
 
     createForm.addEventListener('click', editCar);
+  }
+
+  static addSortByTimeListener(): void {
+    const time = document.getElementById('time') as HTMLElement;
+    
+    time.addEventListener('click', sortByTime);
+  }
+
+  static addSortByWinsListener(): void {
+    const wins = document.getElementById('wins') as HTMLElement;
+
+    wins.addEventListener('click', sortByWins);
   }
 
   init(): HTMLElement {
@@ -118,6 +131,8 @@ export default class App {
     App.addRemoveCarListener();
     App.addStartCarListener();
     App.addStopCarListener();
+    App.addSortByTimeListener();
+    App.addSortByWinsListener();
     this.addResetListener();
     this.addStartRaceListener();
     this.addGenerateCarsListener();

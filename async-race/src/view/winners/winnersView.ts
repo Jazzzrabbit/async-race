@@ -8,7 +8,7 @@ export default class WinnersView {
     this.wrapper = document.createElement('div');
   }
 
-  renderWinner(): string {
+  static renderWinner(): string {
     return currentState.winners.map(item => {
       return `<tr>
                 <th>${item.id}</th>
@@ -21,7 +21,7 @@ export default class WinnersView {
     }).join('');     
   }
 
-  renderWinnersTable(): string {
+  static renderWinnersTable(): string {
     return `
     <div class="title-wrapper">
       <h1 class="title winners__title">Winners (${currentState.winnersCount})</h1>
@@ -33,8 +33,8 @@ export default class WinnersView {
           <th>Number</th>
           <th>Car</th>
           <th>Name</th>
-          <th>Wins</th>
-          <th>Best time</th>
+          <th class="wins" id="wins">Wins</th>
+          <th class="time" id="time">Best time</th>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +46,7 @@ export default class WinnersView {
 
   render(): HTMLDivElement {
     this.wrapper.classList.add('table-wrapper', 'hidden');
-    this.wrapper.innerHTML = this.renderWinnersTable();
+    this.wrapper.innerHTML = WinnersView.renderWinnersTable();
     return this.wrapper;
   }
 }

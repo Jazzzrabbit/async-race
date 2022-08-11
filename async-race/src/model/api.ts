@@ -1,4 +1,4 @@
-import { Cars, Car, Winners, Winner, Success } from './type';
+import { Cars, Car, Winners, Winner, Success, WinnerData } from './type';
 
 const baseLink = 'http://127.0.0.1:3000';
 const garage = `${baseLink}/garage`;
@@ -16,7 +16,7 @@ export const getCar = async (id: number): Promise<Car> => {
   return response.json();
 };
 
-export const getWinners = async (page: number, limit = 10, sort?: string[], order?: string[]): Promise<Winners> => {
+export const getWinners = async (page: number, limit = 10, sort?: string, order?: string): Promise<Winners> => {
   const response: Response = await fetch(`${winners}/?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
   const data: Winner = await response.json();
 
@@ -99,7 +99,7 @@ export const driveMode = async (id: number, status: string): Promise<Success> =>
   return { success: true, id: id };
 };
 
-export const createWinner = async (data: { id: number | null, wins: number, time: number }): Promise<Response> => {
+export const createWinner = async (data: WinnerData): Promise<Response> => {
   const response: Response = await fetch(winners, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -110,7 +110,7 @@ export const createWinner = async (data: { id: number | null, wins: number, time
 };
 
 export const updateWinner = 
-  async (id: number, data: { id: number | null, wins: number, time: number }): Promise<Response> => {
+  async (id: number, data: WinnerData): Promise<Response> => {
     const response: Response = await fetch(`${winners}/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),

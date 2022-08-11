@@ -16,7 +16,7 @@ export default class GarageView {
     `;
   }
 
-  renderCar(id: number | undefined, name: string, color: string): string {
+  static renderCar(id: number | undefined, name: string, color: string): string {
     return `<div class="car" id="${id}">
               <p class="car-name">${name}</p>
               <button class="select-car btn">Select</button>
@@ -29,7 +29,7 @@ export default class GarageView {
             </div>`;
   }
 
-  renderGarage(): string {
+  static renderGarage(): string {
     return `<div class="title-wrapper">
               <h1 class="title garage__title">Garage (${currentState.carsCount})</h1>
               <h2 class="subtitle garage__subtitle">Page #${currentState.page}</h2>
@@ -40,7 +40,7 @@ export default class GarageView {
 
   render(): HTMLDivElement {
     this.wrapper.classList.add('garage-wrapper');
-    this.wrapper.innerHTML = this.renderGarage();
+    this.wrapper.innerHTML = GarageView.renderGarage();
 
     return this.wrapper;
   }

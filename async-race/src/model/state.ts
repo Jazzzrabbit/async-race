@@ -20,4 +20,6 @@ export const currentState: State = {
   winners: winners,
   winnersCount: winnersCount,
   winnersPage: 1,
+  sortBy: 'time',
+  sortOrder: 'ASC',
 }; 

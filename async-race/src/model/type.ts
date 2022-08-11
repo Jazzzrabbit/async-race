@@ -47,9 +47,17 @@ export type State = {
   }[],
   winnersCount: string | null,
   winnersPage: number,
+  sortBy: string,
+  sortOrder: string,
 };
 
 export type Success = {
   success: boolean, 
   id?: number | undefined,
+};
+
+export type WinnerData = { 
+  id: number | null,
+  wins: number,
+  time: number 
 };
