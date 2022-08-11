@@ -8,7 +8,7 @@ import GarageView from '../view/garage/garageView';
 import WinnersView from '../view/winners/winnersView';
 import { updateCurrentState } from './updateCurrentState';
 
-function addListeners(): void {
+export function addListeners(): void {
   App.addRemoveCarListener();
   App.addEditCarListener();
   App.addStartCarListener();
